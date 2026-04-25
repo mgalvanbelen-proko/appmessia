@@ -147,7 +147,7 @@ export default function LandingPage() {
             opacity: 0.85,
           }}
         >
-          Sin registro · Sin compromiso · Empezá hoy
+          Charlemos, de lo que quieras
         </p>
 
         {/* Ornament divider */}
