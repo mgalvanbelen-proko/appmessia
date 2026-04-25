@@ -1,0 +1,44 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --crema: #F5EFE6;
+  --tierra: #3B2817;
+  --tabaco: #9B6B3D;
+  --azul-noche: #2C3E5C;
+  --cielo-polvo: #7B95B8;
+  --coral: #FF5A4E;
+}
+
+html,
+body {
+  background-color: var(--crema);
+  color: var(--tierra);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: var(--font-inter), system-ui, -apple-system, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+textarea {
+  font-family: inherit;
+}
+
+/* Subtle scrollbar in chat area */
+.chat-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+.chat-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+.chat-scroll::-webkit-scrollbar-thumb {
+  background: rgba(155, 107, 61, 0.25);
+  border-radius: 3px;
+}
