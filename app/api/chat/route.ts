@@ -28,12 +28,15 @@ export async function POST(req: Request) {
     return new Response("No messages", { status: 400 });
   }
 
-  const apiKey = process.env.ANTHROPIC_API_KEY;
+  const apiKey = process.env.MESSIA_ANTHROPIC_API_KEY;
   if (!apiKey) {
-    return new Response("Missing ANTHROPIC_API_KEY", { status: 500 });
+    return new Response("Missing MESSIA_ANTHROPIC_API_KEY", { status: 500 });
   }
 
-  const client = new Anthropic({ apiKey });
+  const client = new Anthropic({
+    apiKey,
+    baseURL: "https://api.anthropic.com",
+  });
 
   const encoder = new TextEncoder();
   const stream = new ReadableStream({

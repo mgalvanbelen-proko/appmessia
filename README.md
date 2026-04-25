@@ -36,7 +36,7 @@ public/
    ```
 2. Crear el archivo `.env.local` en la raíz copiando `.env.local.example`:
    ```
-   ANTHROPIC_API_KEY=sk-ant-tu-api-key-aca
+   MESSIA_ANTHROPIC_API_KEY=sk-ant-tu-api-key-aca
    ```
    Conseguí tu API key en https://console.anthropic.com → **API Keys**.
 3. Levantar el dev server:
@@ -58,7 +58,7 @@ public/
    ```
 2. En https://vercel.com → **Add New… → Project** → importá el repo.
 3. En **Environment Variables** agregá:
-   - `ANTHROPIC_API_KEY` = tu key de Anthropic
+   - `MESSIA_ANTHROPIC_API_KEY` = tu key de Anthropic
 4. Deploy. Vercel te da una URL pública tipo `https://messia.vercel.app` que podés compartir.
 
 ## Personalización
