@@ -4,8 +4,8 @@ import Logo from "@/components/Logo";
 function FeatureIcon({ children }: { children: React.ReactNode }) {
   return (
     <svg
-      width="32"
-      height="32"
+      width="36"
+      height="36"
       viewBox="0 0 32 32"
       fill="none"
       stroke="#FF5A4E"
@@ -52,23 +52,56 @@ const features = [
   },
 ];
 
+function Ornament() {
+  return (
+    <div
+      aria-hidden="true"
+      className="flex items-center justify-center gap-3"
+      style={{ color: "rgba(155, 107, 61, 0.4)" }}
+    >
+      <span style={{ height: 1, width: 40, background: "currentColor", display: "block" }} />
+      <span
+        style={{
+          width: 5,
+          height: 5,
+          borderRadius: 999,
+          background: "var(--coral)",
+          display: "block",
+        }}
+      />
+      <span style={{ height: 1, width: 40, background: "currentColor", display: "block" }} />
+    </div>
+  );
+}
+
 export default function LandingPage() {
   return (
-    <main className="min-h-screen flex flex-col" style={{ backgroundColor: "var(--crema)" }}>
+    <main
+      className="min-h-screen flex flex-col relative overflow-hidden"
+      style={{
+        backgroundColor: "var(--crema)",
+        backgroundImage:
+          "radial-gradient(ellipse 80% 50% at 50% 0%, rgba(123, 149, 184, 0.08) 0%, transparent 60%), radial-gradient(ellipse 70% 40% at 50% 100%, rgba(255, 90, 78, 0.05) 0%, transparent 60%)",
+      }}
+    >
       {/* Header */}
-      <header className="px-6 sm:px-10 py-6">
-        <Logo variant="horizontal" size={26} />
+      <header className="px-6 sm:px-10 py-6 z-10">
+        <Logo variant="horizontal" size={28} />
       </header>
 
       {/* Hero */}
-      <section className="flex-1 flex flex-col items-center justify-center text-center px-6 py-12 sm:py-20">
-        <Logo variant="symbol" size={80} />
+      <section className="flex-1 flex flex-col items-center justify-center text-center px-6 pt-8 pb-16 sm:pt-16 sm:pb-24 z-10">
+        {/* Big full logo as protagonist */}
+        <div className="flex flex-col items-center mb-12 sm:mb-16">
+          <Logo variant="full" size={140} />
+        </div>
 
         <h1
-          className="font-serif mt-8 leading-tight"
+          className="font-serif leading-[1.05]"
           style={{
             color: "var(--tierra)",
-            fontSize: "clamp(36px, 6vw, 48px)",
+            fontSize: "clamp(40px, 7vw, 64px)",
+            letterSpacing: "-0.02em",
           }}
         >
           Tu compañero espiritual,
@@ -77,10 +110,10 @@ export default function LandingPage() {
         </h1>
 
         <p
-          className="mt-5 text-base sm:text-lg"
+          className="mt-6"
           style={{
             color: "var(--tabaco)",
-            maxWidth: "480px",
+            maxWidth: "520px",
             lineHeight: 1.6,
             fontSize: "clamp(15px, 2.2vw, 18px)",
           }}
@@ -91,25 +124,42 @@ export default function LandingPage() {
 
         <Link
           href="/chat"
-          className="mt-10 inline-flex items-center justify-center transition-colors"
+          className="mt-10 inline-flex items-center justify-center transition-all hover:scale-[1.02]"
           style={{
             backgroundColor: "var(--coral)",
             color: "white",
-            padding: "16px 32px",
-            borderRadius: 12,
+            padding: "18px 36px",
+            borderRadius: 14,
             fontWeight: 500,
-            fontSize: 16,
+            fontSize: 16.5,
             letterSpacing: "0.2px",
+            boxShadow: "0 8px 24px rgba(255, 90, 78, 0.25)",
           }}
         >
           Empezar conversación
         </Link>
 
+        <p
+          className="mt-5"
+          style={{
+            color: "var(--tabaco)",
+            fontSize: 13,
+            opacity: 0.85,
+          }}
+        >
+          Sin registro · Sin compromiso · Empezá hoy
+        </p>
+
+        {/* Ornament divider */}
+        <div className="mt-20 sm:mt-28 mb-12 sm:mb-16">
+          <Ornament />
+        </div>
+
         {/* Features */}
         <div
-          className="grid gap-8 mt-20 sm:mt-24 w-full"
+          className="grid gap-10 sm:gap-12 w-full"
           style={{
-            maxWidth: 960,
+            maxWidth: 980,
             gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))",
           }}
         >
@@ -118,7 +168,12 @@ export default function LandingPage() {
               <div>{f.icon}</div>
               <h3
                 className="font-serif"
-                style={{ color: "var(--tierra)", fontSize: 20, lineHeight: 1.3 }}
+                style={{
+                  color: "var(--tierra)",
+                  fontSize: 22,
+                  lineHeight: 1.3,
+                  letterSpacing: "-0.01em",
+                }}
               >
                 {f.title}
               </h3>
@@ -126,7 +181,7 @@ export default function LandingPage() {
                 style={{
                   color: "var(--tabaco)",
                   fontSize: 15,
-                  lineHeight: 1.55,
+                  lineHeight: 1.6,
                 }}
               >
                 {f.body}
@@ -138,10 +193,10 @@ export default function LandingPage() {
 
       {/* Footer */}
       <footer
-        className="px-6 sm:px-10 py-10 mt-12 flex flex-col items-center gap-5 text-center"
-        style={{ borderTop: "1px solid rgba(155, 107, 61, 0.3)" }}
+        className="px-6 sm:px-10 py-10 mt-12 flex flex-col items-center gap-5 text-center z-10"
+        style={{ borderTop: "1px solid rgba(155, 107, 61, 0.25)" }}
       >
-        <Logo variant="horizontal" size={22} />
+        <Logo variant="horizontal" size={24} />
         <p
           style={{
             color: "var(--tabaco)",
