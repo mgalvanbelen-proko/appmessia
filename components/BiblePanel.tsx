@@ -136,7 +136,6 @@ export default function BiblePanel({ onClose }: { onClose?: () => void }) {
           <button
             onClick={onClose}
             aria-label="Cerrar panel"
-            className="lg:hidden"
             style={{
               width: 32,
               height: 32,

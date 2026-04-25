@@ -19,7 +19,7 @@ export default function ChatPage() {
   ]);
   const [input, setInput] = useState("");
   const [isStreaming, setIsStreaming] = useState(false);
-  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [panelOpen, setPanelOpen] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -97,14 +97,12 @@ export default function ChatPage() {
 
   return (
     <div
-      className="flex h-[100dvh]"
+      className="flex flex-col h-[100dvh] relative"
       style={{ backgroundColor: "var(--azul-noche)" }}
     >
-      {/* Main column */}
-      <div className="flex flex-col flex-1 min-w-0">
         {/* Header */}
         <header
-          className="sticky top-0 z-10 flex items-center justify-between"
+          className="sticky top-0 z-20 flex items-center justify-between"
           style={{
             backgroundColor: "rgba(245, 239, 230, 0.92)",
             backdropFilter: "blur(8px)",
@@ -113,23 +111,25 @@ export default function ChatPage() {
             padding: "14px 16px",
           }}
         >
-          <span style={{ width: 36 }} aria-hidden="true" />
+          <span style={{ width: 40 }} aria-hidden="true" />
           <Logo variant="horizontal" size={24} />
           <button
-            onClick={() => setDrawerOpen(true)}
-            aria-label="Abrir Biblia"
-            className="lg:hidden"
+            onClick={() => setPanelOpen((v) => !v)}
+            aria-label={panelOpen ? "Cerrar Biblia" : "Abrir Biblia"}
+            aria-expanded={panelOpen}
+            title={panelOpen ? "Cerrar Biblia" : "Abrir Biblia"}
             style={{
-              width: 36,
-              height: 36,
+              width: 40,
+              height: 40,
               borderRadius: 10,
-              border: "1px solid rgba(155, 107, 61, 0.3)",
-              background: "white",
-              color: "var(--tierra)",
+              border: "1px solid rgba(155, 107, 61, 0.35)",
+              background: panelOpen ? "var(--coral)" : "white",
+              color: panelOpen ? "white" : "var(--tierra)",
               cursor: "pointer",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
+              transition: "background-color 0.18s, color 0.18s",
             }}
           >
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -219,41 +219,34 @@ export default function ChatPage() {
             </button>
           </div>
         </div>
-      </div>
 
-      {/* Desktop side panel */}
+      {/* Backdrop (mobile only) */}
+      {panelOpen && (
+        <div
+          onClick={() => setPanelOpen(false)}
+          aria-hidden="true"
+          className="lg:hidden fixed inset-0 z-30"
+          style={{ background: "rgba(0,0,0,0.4)" }}
+        />
+      )}
+
+      {/* Sliding Bible panel */}
       <aside
-        className="hidden lg:flex flex-col"
+        aria-hidden={!panelOpen}
+        className="fixed top-0 right-0 h-full flex flex-col z-40"
         style={{
-          width: 340,
-          flexShrink: 0,
+          width: "min(360px, 92vw)",
           backgroundColor: "var(--crema)",
           borderLeft: "1px solid rgba(155, 107, 61, 0.25)",
+          boxShadow: panelOpen ? "-12px 0 32px rgba(0,0,0,0.25)" : "none",
+          transform: panelOpen ? "translateX(0)" : "translateX(100%)",
+          transition: "transform 0.28s ease-out, box-shadow 0.28s ease-out",
+          visibility: panelOpen ? "visible" : "hidden",
+          transitionProperty: "transform, box-shadow, visibility",
         }}
       >
-        <BiblePanel />
+        <BiblePanel onClose={() => setPanelOpen(false)} />
       </aside>
-
-      {/* Mobile drawer */}
-      {drawerOpen && (
-        <div
-          className="lg:hidden fixed inset-0 z-50"
-          onClick={() => setDrawerOpen(false)}
-          style={{ background: "rgba(0,0,0,0.4)" }}
-        >
-          <div
-            onClick={(e) => e.stopPropagation()}
-            className="absolute right-0 top-0 h-full flex flex-col"
-            style={{
-              width: "min(360px, 90vw)",
-              backgroundColor: "var(--crema)",
-              boxShadow: "-8px 0 24px rgba(0,0,0,0.2)",
-            }}
-          >
-            <BiblePanel onClose={() => setDrawerOpen(false)} />
-          </div>
-        </div>
-      )}
     </div>
   );
 }
