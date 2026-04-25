@@ -53,13 +53,8 @@ export default function LandingPage() {
           padding: "20px 32px",
         }}
       >
-        <span className="md:hidden" style={{ padding: "0", display: "block" }}>
-          <HeaderLogo />
-        </span>
-        <span className="hidden md:flex">
-          <HeaderLogo />
-        </span>
-        <span className="hidden md:flex">
+        <HeaderLogo />
+        <span className="hidden md:inline-flex">
           <LogoTagline />
         </span>
       </header>
