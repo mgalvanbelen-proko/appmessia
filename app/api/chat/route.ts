@@ -1,5 +1,6 @@
 import Anthropic from "@anthropic-ai/sdk";
 import { MESSIA_SYSTEM_PROMPT } from "@/lib/system-prompt";
+import { checkRateLimit, clientIp } from "@/lib/rate-limit";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -9,7 +10,25 @@ type IncomingMessage = {
   content: string;
 };
 
+function rateLimitMessage(resetMs: number): string {
+  const minutes = Math.max(1, Math.ceil(resetMs / 60000));
+  return `Charlemos un poco más tarde, ¿sí? Necesito un descansito 🙏 Probá de nuevo en ${minutes} ${minutes === 1 ? "minuto" : "minutos"}.`;
+}
+
 export async function POST(req: Request) {
+  // Rate limit by IP
+  const ip = clientIp(req.headers);
+  const limit = checkRateLimit(ip);
+  if (!limit.allowed) {
+    return new Response(rateLimitMessage(limit.resetMs), {
+      status: 429,
+      headers: {
+        "Content-Type": "text/plain; charset=utf-8",
+        "Retry-After": String(Math.ceil(limit.resetMs / 1000)),
+      },
+    });
+  }
+
   let body: { messages?: IncomingMessage[] };
   try {
     body = await req.json();

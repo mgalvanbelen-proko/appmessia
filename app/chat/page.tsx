@@ -78,6 +78,16 @@ function ChatPageInner() {
         body: JSON.stringify({ messages: apiMessages }),
       });
 
+      if (res.status === 429) {
+        const limitText = await res.text();
+        setMessages((prev) => {
+          const next = [...prev];
+          next[next.length - 1] = { role: "assistant", content: limitText };
+          return next;
+        });
+        return;
+      }
+
       if (!res.ok || !res.body) throw new Error("Network error");
 
       const reader = res.body.getReader();
