@@ -3,10 +3,11 @@ type LogoVariant = "full" | "horizontal" | "symbol";
 type LogoProps = {
   variant?: LogoVariant;
   size?: number;
+  wordmarkSize?: number;
   className?: string;
 };
 
-function Symbol({ size = 32 }: { size?: number }) {
+export function LogoSymbol({ size = 32 }: { size?: number }) {
   const w = size;
   const h = (size * 95) / 105;
   return (
@@ -16,7 +17,7 @@ function Symbol({ size = 32 }: { size?: number }) {
       width={w}
       height={h}
       aria-hidden="true"
-      style={{ display: "block" }}
+      style={{ display: "block", flexShrink: 0 }}
     >
       <path
         d="M 10 25 Q 10 5 30 5 L 75 5 Q 95 5 95 25 L 95 55 Q 95 75 75 75 L 45 75 L 28 90 L 32 75 Q 10 75 10 55 Z"
@@ -35,16 +36,24 @@ function Symbol({ size = 32 }: { size?: number }) {
   );
 }
 
-function Wordmark({ size = 28 }: { size?: number }) {
+export function LogoWordmark({ size = 22 }: { size?: number }) {
   return (
     <span
-      className="font-serif leading-none"
-      style={{ fontSize: size, color: "var(--tierra)" }}
+      className="font-serif leading-none select-none"
+      style={{
+        fontSize: size,
+        color: "#3B2817",
+        fontWeight: 400,
+        letterSpacing: "-0.01em",
+      }}
     >
       Mess
       <em
-        className="not-italic"
-        style={{ fontStyle: "italic", color: "var(--coral)" }}
+        style={{
+          fontStyle: "italic",
+          color: "#FF5A4E",
+          fontFamily: "inherit",
+        }}
       >
         IA
       </em>
@@ -52,25 +61,28 @@ function Wordmark({ size = 28 }: { size?: number }) {
   );
 }
 
-function Tagline() {
+export function LogoTagline() {
   return (
-    <span className="flex items-center gap-2">
+    <span
+      className="inline-flex items-center gap-2 select-none"
+      aria-label="fe que conversa"
+    >
       <span
         aria-hidden="true"
         style={{
-          width: 3,
-          height: 3,
+          width: 6,
+          height: 6,
           borderRadius: 999,
-          backgroundColor: "var(--coral)",
+          backgroundColor: "#FF5A4E",
           display: "inline-block",
         }}
       />
       <span
         style={{
-          color: "var(--azul-noche)",
+          color: "#2C3E5C",
           fontSize: 11,
           fontWeight: 500,
-          letterSpacing: "3px",
+          letterSpacing: "2px",
           textTransform: "uppercase",
         }}
       >
@@ -83,35 +95,36 @@ function Tagline() {
 export default function Logo({
   variant = "horizontal",
   size,
+  wordmarkSize,
   className = "",
 }: LogoProps) {
   if (variant === "symbol") {
     return (
       <span className={className}>
-        <Symbol size={size ?? 32} />
+        <LogoSymbol size={size ?? 32} />
       </span>
     );
   }
 
   if (variant === "full") {
     const symbolSize = size ?? 64;
-    const wordmarkSize = Math.round(symbolSize * 0.6);
+    const wmSize = wordmarkSize ?? Math.round(symbolSize * 0.6);
     return (
       <span className={`flex flex-col items-center gap-3 ${className}`}>
-        <Symbol size={symbolSize} />
-        <Wordmark size={wordmarkSize} />
-        <Tagline />
+        <LogoSymbol size={symbolSize} />
+        <LogoWordmark size={wmSize} />
+        <LogoTagline />
       </span>
     );
   }
 
   // horizontal
-  const symbolSize = size ?? 28;
-  const wordmarkSize = Math.round(symbolSize * 1.1);
+  const symbolSize = size ?? 24;
+  const wmSize = wordmarkSize ?? Math.round(symbolSize * 0.92);
   return (
-    <span className={`flex items-center gap-2 ${className}`}>
-      <Symbol size={symbolSize} />
-      <Wordmark size={wordmarkSize} />
+    <span className={`inline-flex items-center gap-2 ${className}`}>
+      <LogoSymbol size={symbolSize} />
+      <LogoWordmark size={wmSize} />
     </span>
   );
 }

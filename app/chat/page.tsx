@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { Suspense, useEffect, useRef, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import Logo from "@/components/Logo";
 import BiblePanel from "@/components/BiblePanel";
 
@@ -14,6 +15,16 @@ Soy MessIA, un asistente inspirado en las enseñanzas de Jesús.
 Contame qué tenés en el corazón hoy.`;
 
 export default function ChatPage() {
+  return (
+    <Suspense fallback={null}>
+      <ChatPageInner />
+    </Suspense>
+  );
+}
+
+function ChatPageInner() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const [messages, setMessages] = useState<Message[]>([
     { role: "assistant", content: WELCOME_MESSAGE },
   ]);
@@ -22,6 +33,7 @@ export default function ChatPage() {
   const [panelOpen, setPanelOpen] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const initialMessageHandled = useRef(false);
 
   useEffect(() => {
     const el = scrollRef.current;
@@ -36,15 +48,27 @@ export default function ChatPage() {
     ta.style.height = Math.min(ta.scrollHeight, maxHeight) + "px";
   }, [input]);
 
-  async function sendMessage() {
-    const trimmed = input.trim();
-    if (!trimmed || isStreaming) return;
+  // Handle ?message= prefill from landing
+  useEffect(() => {
+    if (initialMessageHandled.current) return;
+    const initial = searchParams.get("message");
+    if (initial && initial.trim()) {
+      initialMessageHandled.current = true;
+      sendMessage(initial.trim());
+      router.replace("/chat", { scroll: false });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchParams]);
 
-    const userMsg: Message = { role: "user", content: trimmed };
+  async function sendMessage(override?: string) {
+    const text = (override ?? input).trim();
+    if (!text || isStreaming) return;
+
+    const userMsg: Message = { role: "user", content: text };
     const apiMessages: Message[] = [...messages.slice(1), userMsg];
 
     setMessages((prev) => [...prev, userMsg, { role: "assistant", content: "" }]);
-    setInput("");
+    if (override === undefined) setInput("");
     setIsStreaming(true);
 
     try {
@@ -196,7 +220,7 @@ export default function ChatPage() {
               }}
             />
             <button
-              onClick={sendMessage}
+              onClick={() => sendMessage()}
               disabled={isStreaming || !input.trim()}
               aria-label="Enviar"
               className="flex items-center justify-center transition-opacity"
